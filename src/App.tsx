@@ -48,8 +48,29 @@ export function App() {
 
   async function delay() {
     return await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 500);
     });
+  }
+
+  async function handleNewGame() {
+    await resetCards()
+    setCards(state => shuffleCards(state))
+  }
+
+  async function resetCards() {
+    return await new Promise(async (resolve) => {
+      setCards(state => state.map(it => { return {...it, isFlipped: false, disabled: false} }))
+      await delay()
+      resolve(true)
+    })
+  }
+
+  function shuffleCards(cards: ICard[]) {
+    const shuffledCards = cards
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    return shuffledCards
   }
 
   useEffect(() => {
@@ -61,7 +82,7 @@ export function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Header />
+      <Header handleNewGame={handleNewGame} />
       <Container>
         <Grid rowSpacing={4} columnSpacing={4} container>
           {cards.map((card) => (
