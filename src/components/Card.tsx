@@ -5,7 +5,11 @@ import {
 import { useState } from 'react';
 import ReactCardFlip from 'react-card-flip';
 
-export function Card() {
+interface CardProps {
+  image: string
+}
+
+export function Card(props: CardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   function handleClick() {
@@ -30,14 +34,15 @@ export function Card() {
       </CardMui>
 
       <CardMui sx={{ width: '200px', height: '200px' }}>
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea sx={{ width: '100%', height: '100%' }} onClick={handleClick}>
           <img
-            src="https://cf.shopee.com.br/file/335ae2de8a46c626b554bd7136c95fa6"
+            src={props.image}
             alt="dog with glasses"
             draggable={false}
             style={{
               width: '100%',
               height: '100%',
+              objectFit: 'cover'
             }}
           />
         </CardActionArea>
