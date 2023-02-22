@@ -17,15 +17,6 @@ export function Header() {
           onClick={() => {
             /* TODO */
           }}
-          variant="outlined"
-          sx={{ textTransform: 'lowercase' }}
-        >
-          restart
-        </Button>
-        <Button
-          onClick={() => {
-            /* TODO */
-          }}
           variant="contained"
           sx={{ textTransform: 'lowercase' }}
         >
