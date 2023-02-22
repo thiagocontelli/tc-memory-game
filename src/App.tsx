@@ -1,5 +1,5 @@
 import { Container, CssBaseline, Grid, ThemeProvider } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from './components/Card';
 import { Header } from './components/Header';
 import { ICard, shuffledCards } from './mocks/cards';
@@ -24,12 +24,26 @@ export function App() {
       })
     );
     setTurned((state) => [...state, { id: card.id, pair: card.pair }]);
-    await delay();
-    if (turned.length === 1) handleVerify();
   }
 
-  function handleVerify() {
-    // TODO
+  async function handleVerify() {
+    await delay()
+    const first = turned[0]
+    const second = turned[1]
+    if (first.pair !== second.pair) {
+      setCards(state => 
+        state.map((it) => {
+          if (it.pair === first.pair) {
+            return { ...it, isFlipped: false, disabled: false }
+          }
+          if (it.pair === second.pair) {
+            return { ...it, isFlipped: false, disabled: false }
+          }  
+          return it
+        })
+      )
+    }
+    setTurned([])
   }
 
   async function delay() {
@@ -38,15 +52,16 @@ export function App() {
     });
   }
 
+  useEffect(() => {
+    if (turned.length === 2) {
+      handleVerify()
+    }
+  }, [turned])
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Header />
-      {/* <>
-        {turned.map((it) => (
-          <p>{it.pair}</p>
-        ))}
-      </> */}
       <Container>
         <Grid rowSpacing={4} columnSpacing={4} container>
           {cards.map((card) => (
