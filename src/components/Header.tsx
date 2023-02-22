@@ -1,6 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 
-export function Header() {
+interface HeaderProps {
+  handleNewGame: () => void
+}
+
+export function Header(props: HeaderProps) {
   return (
     <Box
       display="flex"
@@ -15,7 +19,7 @@ export function Header() {
       <Box display="flex" gap="1rem">
         <Button
           onClick={() => {
-            /* TODO */
+            props.handleNewGame()
           }}
           variant="contained"
           sx={{ textTransform: 'lowercase' }}
