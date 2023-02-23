@@ -12,7 +12,7 @@ interface CardProps {
 export function Card(props: CardProps) {
   return (
     <ReactCardFlip isFlipped={props.isFlipped} flipDirection="vertical">
-      <CardMui sx={{ width: '150px', aspectRatio: '1' }}>
+      <CardMui sx={{ width: '125px', aspectRatio: '1' }}>
         <CardActionArea onClick={() => props.handleClick()}>
           <img
             src="back.jpg"
@@ -27,7 +27,7 @@ export function Card(props: CardProps) {
         </CardActionArea>
       </CardMui>
 
-      <CardMui sx={{ width: '150px', aspectRatio: '1' }}>
+      <CardMui sx={{ width: '125px', aspectRatio: '1' }}>
         <CardActionArea
           sx={{ width: '100%', height: '100%' }}
           onClick={() => props.handleClick()}
