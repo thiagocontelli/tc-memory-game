@@ -133,7 +133,14 @@ export function App() {
             gap: "2rem",
           }}
         >
-          {explode && <ConfettiExplosion particleCount={150} />}
+          {explode && (
+            <ConfettiExplosion
+              force={0.8}
+              duration={3000}
+              particleCount={150}
+              width={1600}
+            />
+          )}
           <Typography variant="h2">YOU WON!</Typography>
           <Button
             onClick={() => {
@@ -143,7 +150,7 @@ export function App() {
             size="large"
             variant="contained"
             sx={{
-              textTransform: 'lowercase'
+              textTransform: "lowercase",
             }}
           >
             new game
