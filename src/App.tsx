@@ -106,8 +106,8 @@ export function App() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Header handleNewGame={handleNewGame} />
-      <Container>
-        <Grid rowSpacing={4} columnSpacing={4} container>
+      <Container sx={{ display: "grid", placeItems: "center" }}>
+        <Grid sm={10} rowSpacing={4} columnSpacing={4} container>
           {cards.map((card) => (
             <Grid key={card.id} item>
               <Card
