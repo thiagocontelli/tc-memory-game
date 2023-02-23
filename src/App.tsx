@@ -1,9 +1,19 @@
-import { Container, CssBaseline, Grid, ThemeProvider } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Card } from './components/Card';
-import { Header } from './components/Header';
-import { ICard, shuffledCards } from './mocks/cards';
-import { defaultTheme } from './themes/default';
+import {
+  Button,
+  Container,
+  CssBaseline,
+  Dialog,
+  Grid,
+  Modal,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import ConfettiExplosion from "react-confetti-explosion";
+import { Card } from "./components/Card";
+import { Header } from "./components/Header";
+import { ICard, shuffledCards } from "./mocks/cards";
+import { defaultTheme } from "./themes/default";
 
 interface ITurned {
   id: number;
@@ -13,6 +23,7 @@ interface ITurned {
 export function App() {
   const [turned, setTurned] = useState<ITurned[]>([]);
   const [cards, setCards] = useState<ICard[]>([...shuffledCards]);
+  const [explode, setExplode] = useState(false);
 
   async function handleTurn(card: ICard) {
     if (turned.length >= 2) return;
@@ -27,23 +38,23 @@ export function App() {
   }
 
   async function handleVerify() {
-    await delay()
-    const first = turned[0]
-    const second = turned[1]
+    await delay();
+    const first = turned[0];
+    const second = turned[1];
     if (first.pair !== second.pair) {
-      setCards(state => 
+      setCards((state) =>
         state.map((it) => {
           if (it.pair === first.pair) {
-            return { ...it, isFlipped: false, disabled: false }
+            return { ...it, isFlipped: false, disabled: false };
           }
           if (it.pair === second.pair) {
-            return { ...it, isFlipped: false, disabled: false }
-          }  
-          return it
+            return { ...it, isFlipped: false, disabled: false };
+          }
+          return it;
         })
-      )
+      );
     }
-    setTurned([])
+    setTurned([]);
   }
 
   async function delay() {
@@ -53,31 +64,43 @@ export function App() {
   }
 
   async function handleNewGame() {
-    await resetCards()
-    setCards(state => shuffleCards(state))
+    await resetCards();
+    setCards((state) => shuffleCards(state));
   }
 
   async function resetCards() {
     return await new Promise(async (resolve) => {
-      setCards(state => state.map(it => { return {...it, isFlipped: false, disabled: false} }))
-      await delay()
-      resolve(true)
-    })
+      setCards((state) =>
+        state.map((it) => {
+          return { ...it, isFlipped: false, disabled: false };
+        })
+      );
+      await delay();
+      resolve(true);
+    });
   }
 
   function shuffleCards(cards: ICard[]) {
     const shuffledCards = cards
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-    return shuffledCards
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+    return shuffledCards;
   }
 
   useEffect(() => {
     if (turned.length === 2) {
-      handleVerify()
+      handleVerify();
     }
-  }, [turned])
+  }, [turned]);
+
+  useEffect(() => {
+    let count = 0;
+    cards.forEach((card) => {
+      if (!card.isFlipped) count++;
+    });
+    if (count === 0) setExplode(true);
+  }, [cards]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -99,6 +122,31 @@ export function App() {
           ))}
         </Grid>
       </Container>
+      <Modal open={explode}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
+          {explode && <ConfettiExplosion particleCount={150} />}
+          <Typography variant="h2">YOU WON!</Typography>
+          <Button
+            onClick={() => {
+              setExplode(false);
+              handleNewGame();
+            }}
+            size="large"
+            variant="contained"
+          >
+            new game
+          </Button>
+        </div>
+      </Modal>
     </ThemeProvider>
   );
 }
