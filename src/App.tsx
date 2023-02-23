@@ -142,6 +142,9 @@ export function App() {
             }}
             size="large"
             variant="contained"
+            sx={{
+              textTransform: 'lowercase'
+            }}
           >
             new game
           </Button>
